@@ -1,4 +1,6 @@
 import Phaser from 'phaser'
+import EventsCenter from '../classes/eventsCenter'
+import MainMenuScene from './MainMenuScene'
 
 export default class ConsoleUIScene extends Phaser.Scene {
     static readonly KEY = 'console'
@@ -12,14 +14,21 @@ export default class ConsoleUIScene extends Phaser.Scene {
 
     create() {
         const playerInputElement = document.getElementById('console-input') as HTMLTextAreaElement
-        const outputElement = document.querySelector('#console-output')!
+        const consoleOutputElement = document.getElementById('console-output') as HTMLPreElement
 
         playerInputElement.addEventListener('keydown', (event: KeyboardEvent) => {
             if (event.key === 'Enter' && playerInputElement.value.length > 0) {
-                outputElement.innerHTML += '<br/>USR: ' + playerInputElement.value;
-                (playerInputElement as HTMLTextAreaElement).value = '';
+                const playerInput = playerInputElement.value;
+                playerInputElement.value = '';
+                EventsCenter.emit('player-input', { payload: playerInput });
             }
         });
 
+        EventsCenter.on('console-output', (data: { payload: string[] }) => {
+            console.log('console-output', data.payload);
+            consoleOutputElement.innerHTML = data.payload.join('<br>');
+        });
+
+        this.game.scene.start(MainMenuScene.KEY);
     }
 }

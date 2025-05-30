@@ -33,9 +33,6 @@
         height: calc(100% - 50px);
         width: 100%;
         margin: 0;
-
-        /* DEBUG */
-        border: 2px solid lightgreen;
       }
 
       #console-background div#console-input-prefix {
@@ -43,7 +40,7 @@
         float: left;
       }
 
-      #console-background textarea#console-input {
+      #console-background input#console-input {
         background: none;
         resize: none;
         float: right;
@@ -68,20 +65,15 @@
     <script type="module" src="src/main.ts"></script>
 
     <div id="console-background">
-      <pre id="console-output">
-  __  __  ___  _      ___  ___ _  _   _  _   _  ___ _  _ 
- |  \/  |/ _ \| |    / __|/ __| || | /_\| | | |/ __| \| |
- | |\/| | (_) | |__  \__ \ (__| __ |/ _ \ |_| | (_ | .` |
- |_|  |_|\___/|____| |___/\___|_||_/_/ \_\___/ \___|_|\_|
-  -By Phil                                                     
-      </pre>
+      <pre id="console-output"></pre>
       <div id="console-input-prefix">>></div>
-      <textarea
+      <input
         id="console-input"
         name="console-input"
         cols="30"
         rows="1"
-      ></textarea>
+    
+      ></input>
     </div>
   </body>
 </html>
