@@ -1,19 +1,14 @@
 import Phaser from 'phaser'
+import MainMenuScene from './scenes/MainMenuScene'
+import ConsoleUIScene from './scenes/ConsoleUIScene'
 
-import HelloWorldScene from './HelloWorldScene'
 
 const config: Phaser.Types.Core.GameConfig = {
 	type: Phaser.AUTO,
 	parent: 'app',
-	width: 800,
-	height: 600,
-	physics: {
-		default: 'arcade',
-		arcade: {
-			gravity: { y: 200 },
-		},
-	},
-	scene: [HelloWorldScene],
+	width: 1,
+	height: 1,
+	scene: [ConsoleUIScene, MainMenuScene],
 }
 
 export default new Phaser.Game(config)

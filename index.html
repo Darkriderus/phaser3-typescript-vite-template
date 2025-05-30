@@ -1,15 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css?family=IBM Plex Mono"
+      rel="stylesheet"
+    />
 
-<head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>My Phaser 3 Game</title>
-</head>
+    <title>Project SteamSim</title>
 
-<body>
-	<div id="app"></div>
-	<script type="module" src="src/main.ts"></script>
-</body>
+    <style>
+      body {
+        background-color: gray;
+        font-family: "IBM Plex Mono";
+        font-size: 24px;
+      }
+      #console-background {
+        background-color: black;
+        color: lightgreen;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 50vw;
+        height: 80vh;
+        z-index: -1;
+        padding: 15px;
+      }
 
+      #console-background pre#console-output {
+        height: calc(100% - 50px);
+        width: 100%;
+        margin: 0;
+
+        /* DEBUG */
+        border: 2px solid lightgreen;
+      }
+
+      #console-background div#console-input-prefix {
+        width: 30px;
+        float: left;
+      }
+
+      #console-background textarea#console-input {
+        background: none;
+        resize: none;
+        float: right;
+        width: calc(100% - 32px);
+        border: 0;
+        color: lightgreen;
+        padding: 0;
+        margin: 0;
+
+        font-family: "IBM Plex Mono";
+        font-size: 24px;
+
+        &:focus {
+          outline: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app"></div>
+    <script type="module" src="src/main.ts"></script>
+
+    <div id="console-background">
+      <pre id="console-output">
+  __  __  ___  _      ___  ___ _  _   _  _   _  ___ _  _ 
+ |  \/  |/ _ \| |    / __|/ __| || | /_\| | | |/ __| \| |
+ | |\/| | (_) | |__  \__ \ (__| __ |/ _ \ |_| | (_ | .` |
+ |_|  |_|\___/|____| |___/\___|_||_/_/ \_\___/ \___|_|\_|
+  -By Phil                                                     
+      </pre>
+      <div id="console-input-prefix">>></div>
+      <textarea
+        id="console-input"
+        name="console-input"
+        cols="30"
+        rows="1"
+      ></textarea>
+    </div>
+  </body>
 </html>
