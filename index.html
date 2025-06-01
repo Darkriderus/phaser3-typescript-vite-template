@@ -30,32 +30,16 @@
       }
 
       #console-background pre#console-output {
-        height: calc(100% - 50px);
         width: 100%;
         margin: 0;
       }
 
-      #console-background div#console-input-prefix {
-        width: 30px;
-        float: left;
+      #console-background ul#console-options {
+        list-style: none;
       }
-
-      #console-background input#console-input {
-        background: none;
-        resize: none;
-        float: right;
-        width: calc(100% - 32px);
-        border: 0;
-        color: lightgreen;
-        padding: 0;
-        margin: 0;
-
-        font-family: "IBM Plex Mono";
-        font-size: 24px;
-
-        &:focus {
-          outline: none;
-        }
+      #console-background ul#console-options li.selected {
+        border: 2px solid lightgreen;
+        font-weight: 700;
       }
     </style>
   </head>
@@ -66,14 +50,7 @@
 
     <div id="console-background">
       <pre id="console-output"></pre>
-      <div id="console-input-prefix">>></div>
-      <input
-        id="console-input"
-        name="console-input"
-        cols="30"
-        rows="1"
-    
-      ></input>
+      <ul id="console-options"></ul>
     </div>
   </body>
 </html>
