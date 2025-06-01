@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import EventsCenter from '../classes/eventsCenter'
+import EventsCenter from '../classes/EventsCenter'
 
 export default class MainMenuScene extends Phaser.Scene {
     static readonly KEY = 'main-menu'
