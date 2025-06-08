@@ -1,12 +1,16 @@
 import Phaser from 'phaser'
 import EventsCenter from '../classes/EventsCenter'
-import MainMenuScene from './MainMenuScene'
-import { GameOption } from '../classes/GameLogic'
-import { PlayerData } from '../classes/PlayerData'
+import MenuScene, { MenuKey } from './MenuScene'
+import { GameOption, LocationKey } from '../classes/GameLogic'
 
 export enum Direction {
     UP = -1,
     DOWN = 1
+}
+
+export enum ConsoleEvents {
+    SELECT_OPTION = 'select-option',
+    UPDATE_OUTPUT = 'update-output'
 }
 
 export default class ConsoleUIScene extends Phaser.Scene {
@@ -20,7 +24,7 @@ export default class ConsoleUIScene extends Phaser.Scene {
     private _selectedIndex = 0
 
     constructor() {
-        super({ key: ConsoleUIScene.KEY, active: true })
+        super({ key: ConsoleUIScene.KEY })
     }
 
     // Getters/Setters
@@ -51,11 +55,28 @@ export default class ConsoleUIScene extends Phaser.Scene {
         this.renderTextOutput()
     }
 
+    get locationKey(): LocationKey | MenuKey | undefined {
+        const list = document.getElementById('console-options') as HTMLUListElement
+        if (!list) return undefined
+        const dataLocationKey = list.getAttribute('data-location-key')
+        if (!dataLocationKey) return undefined
+        const selectedLocationKey = dataLocationKey as LocationKey
+        const selectedMenuKey = dataLocationKey as MenuKey
+
+        return selectedLocationKey || selectedMenuKey || undefined
+    }
+
+    set locationKey(value: LocationKey | MenuKey | undefined) {
+        const list = document.getElementById('console-options') as HTMLUListElement
+        if (!list) return
+        list.setAttribute('data-location-key', value || '')
+    }
+
     // Phaser lifecycle
     create(): void {
         this.setupKeyboardControls()
         this.registerEventListeners()
-        this.game.scene.start(MainMenuScene.KEY)
+        this.game.scene.start(MenuScene.KEY)
     }
 
     update(): void {
@@ -84,9 +105,11 @@ export default class ConsoleUIScene extends Phaser.Scene {
 
     // Event Handling
     private registerEventListeners(): void {
-        EventsCenter.on('console-output', ({ text, options }: { text: string; options: GameOption[] }) => {
+        EventsCenter.on(ConsoleEvents.UPDATE_OUTPUT, ({ locationKey, text, options }: { locationKey: LocationKey | MenuKey, text: string; options: GameOption[] }) => {
+            console.log(ConsoleUIScene.KEY, ConsoleEvents.UPDATE_OUTPUT, { locationKey, text, options })
             this.text = text
             this.options = options
+            this.locationKey = locationKey
             this.selectedIndex = 0
         })
     }
@@ -95,6 +118,7 @@ export default class ConsoleUIScene extends Phaser.Scene {
     private renderTextOutput(): void {
         const consoleOutput = document.getElementById('console-output') as HTMLDivElement
         if (consoleOutput) {
+
             consoleOutput.textContent = this.text
         }
     }
@@ -107,7 +131,7 @@ export default class ConsoleUIScene extends Phaser.Scene {
 
         this._options.forEach((option, index) => {
             const li = document.createElement('li')
-            li.textContent = option.text
+            li.textContent = option.label
             li.value = option.id
             if (index === this.selectedIndex) li.classList.add('selected')
             list.appendChild(li)
@@ -123,7 +147,6 @@ export default class ConsoleUIScene extends Phaser.Scene {
 
     // Game Logic
     private moveCursor(direction: Direction): void {
-        console.log(PlayerData.currentMenu.options)
         const total = this._options.length
         if (total === 0) return
 
@@ -132,7 +155,7 @@ export default class ConsoleUIScene extends Phaser.Scene {
 
     private triggerSelectedOption(): void {
         const selected = this._options[this.selectedIndex]
-        EventsCenter.emit('option-selected', { selectedId: selected.id })
+        EventsCenter.emit(ConsoleEvents.SELECT_OPTION, { locationKey: this.locationKey, selectedId: selected.id })
         this.selectedIndex = 0
     }
 }

@@ -1,94 +1,82 @@
+import { ConsoleEvents } from '../scenes/ConsoleUIScene'
 import EventsCenter from './EventsCenter'
 import { PlayerData } from './PlayerData'
 
+export enum LocationKey {
+    HOMEBASE = 'homebase',
+    STORAGE = 'storage',
+    MAP_ROOM = 'map-room'
+}
+
 export type GameOption = {
-    text: string
+    label: string
     id: number
     onSelect: () => void
-    selectable: () => boolean
+    // isSelectable: () => boolean
+    // isVisible: () => boolean
 }
 
 export type GameLocation = {
     label: string
-    id: number
+    key: LocationKey
     options: GameOption[]
 }
 
-class OptionFactory {
-    static create(
-        text: string,
-        id: number,
-        onSelect: () => void,
-        selectable: () => boolean = () => true
-    ): GameOption {
-        return { text, id, onSelect, selectable }
-    }
-}
-
 export class GameLogic {
-    static readonly LOCATIONS: Record<string, GameLocation> = {
-        MAIN_MENU: {
-            label: 'Main Menu',
-            id: 10,
-            options: [
-                OptionFactory.create('New Game', 1010, () => {
-                    PlayerData.createGame()
-                    this.moveToLocation('HOME')
-                }),
-                OptionFactory.create('Load Game', 1020, () => {
-                    console.log('Load Game')
-                    this.moveToLocation('HOME')
-
-                }, () => PlayerData.hasSavedGame)
-            ]
-        },
-
-        HOME: {
+    readonly ALL_LOCATIONS: Record<LocationKey, GameLocation> = {
+        [LocationKey.HOMEBASE]: {
             label: 'Homebase',
-            id: 20,
+            key: LocationKey.HOMEBASE,
             options: [
-                OptionFactory.create('Go to the War Room', 2010, () => {
-                    this.moveToLocation('WAR_ROOM')
-                }),
-                OptionFactory.create('Go to the Storage Vaults', 2020, () => {
-                    this.moveToLocation('STORAGE')
-                })
+                {
+                    label: 'Storage',
+                    id: 1,
+                    onSelect: () => this.moveToLocation(LocationKey.STORAGE)
+                },
+                {
+                    label: 'Map Room',
+                    id: 2,
+                    onSelect: () => this.moveToLocation(LocationKey.MAP_ROOM)
+                }
             ]
         },
-
-        WAR_ROOM: {
-            label: 'War Room',
-            id: 30,
+        [LocationKey.STORAGE]: {
+            label: 'Storage',
+            key: LocationKey.STORAGE,
             options: [
-                OptionFactory.create('Go to the Homebase', 3010, () => {
-                    this.moveToLocation('HOME')
-                }),
-                OptionFactory.create('Go to the Storage Vaults', 3020, () => {
-                    this.moveToLocation('STORAGE')
-                })
+                {
+                    label: 'Homebase',
+                    id: 1,
+                    onSelect: () => this.moveToLocation(LocationKey.HOMEBASE)
+                }
             ]
         },
-
-        STORAGE: {
-            label: 'Storage Vaults',
-            id: 40,
+        [LocationKey.MAP_ROOM]: {
+            label: 'Map Room',
+            key: LocationKey.MAP_ROOM,
             options: [
-                OptionFactory.create('Go to the Homebase', 4010, () => {
-                    this.moveToLocation('HOME')
-                }),
-                OptionFactory.create('Go to the War Room', 4020, () => {
-                    this.moveToLocation('WAR_ROOM')
-                })
+                {
+                    label: 'Homebase',
+                    id: 1,
+                    onSelect: () => this.moveToLocation(LocationKey.HOMEBASE)
+                }
             ]
         }
     }
 
-    static moveToLocation(location: keyof typeof GameLogic.LOCATIONS) {
-        console.log('Moving to', GameLogic.LOCATIONS[location].label);
-        PlayerData.currentMenu = GameLogic.LOCATIONS[location]
-        EventsCenter.emit('console-output', {
-            text: GameLogic.LOCATIONS[location].label,
-            options: GameLogic.LOCATIONS[location].options
+    constructor() {
+        const currentLocation = PlayerData.currentLocation
+        this.moveToLocation(currentLocation)
+    }
+
+    public get playerData() { return PlayerData }
+
+    moveToLocation(location: LocationKey) {
+        PlayerData.currentLocation = location
+        EventsCenter.emit(ConsoleEvents.UPDATE_OUTPUT, {
+            text: this.ALL_LOCATIONS[location].label,
+            options: this.ALL_LOCATIONS[location].options,
+            locationKey: location
         });
     }
 }

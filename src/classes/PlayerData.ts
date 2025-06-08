@@ -1,4 +1,4 @@
-import { GameLocation, GameLogic } from "./GameLogic";
+import { LocationKey } from "./GameLogic";
 
 export class StoredDataStructure {
     settings: any
@@ -6,8 +6,8 @@ export class StoredDataStructure {
         date: Date,
         money: number,
         rawMaterials: number,
+        currentLocation?: LocationKey
     }
-    currentMenu?: GameLocation
 }
 
 export class PlayerData {
@@ -40,27 +40,19 @@ export class PlayerData {
         this.save(playerData)
     }
 
-    public static get currentMenu(): GameLocation {
-        const currentMenuId = (this.load().currentMenu || GameLogic.LOCATIONS.MAIN_MENU).id
-        console.log('currentMenuId', currentMenuId);
-
-        return Object.values(GameLogic.LOCATIONS).find((location: GameLocation) => location.id === currentMenuId)!
+    public static get currentLocation(): LocationKey {
+        return this.load().savedGame?.currentLocation || LocationKey.HOMEBASE
 
     }
-    public static set currentMenu(value: GameLocation) {
+    public static set currentLocation(value: LocationKey) {
         const playerData = this.load()
-        playerData.currentMenu = value
+        playerData.savedGame!.currentLocation = value
         this.save(playerData)
     }
 
     // #endregion
 
-    public static init() {
-        this.currentMenu = GameLogic.LOCATIONS.MAIN_MENU
-    }
-
-    public static createGame() {
-        console.log("Create Game");
+    public static create() {
         const playerData = this.load()
         playerData.savedGame = {
             date: new Date(),
@@ -72,7 +64,7 @@ export class PlayerData {
 
     private static load(): StoredDataStructure {
         const storedData = localStorage.getItem(PlayerData.KEY);
-        return storedData ? JSON.parse(storedData) : { currentMenu: GameLogic.LOCATIONS.MAIN_MENU, settings: {} }
+        return storedData ? JSON.parse(storedData) : { savedGame: undefined, settings: {} }
     }
 
     private static save(dataToSave: StoredDataStructure) {

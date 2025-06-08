@@ -1,6 +1,7 @@
 import Phaser from 'phaser'
-import MainMenuScene from './scenes/MainMenuScene'
+import MenuScene from './scenes/MenuScene'
 import ConsoleUIScene from './scenes/ConsoleUIScene'
+import GameScene from './scenes/GameScene'
 
 
 const config: Phaser.Types.Core.GameConfig = {
@@ -8,7 +9,7 @@ const config: Phaser.Types.Core.GameConfig = {
 	parent: 'app',
 	width: 1,
 	height: 1,
-	scene: [ConsoleUIScene, MainMenuScene],
+	scene: [ConsoleUIScene, MenuScene, GameScene],
 }
 
 export default new Phaser.Game(config)
