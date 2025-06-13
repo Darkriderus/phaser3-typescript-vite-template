@@ -36,14 +36,21 @@ export const generateFullHeader = (playerData: PlayerData) => {
             {
                 "name": "Money",
                 "align": "right"
-            }, {
+            },
+            {
                 "name": "Raw Materials",
                 "align": "right"
-            }],
+            },
+            {
+                "name": "Building Slots",
+                "align": "right"
+            }
+        ],
         "rows": [
             [
                 playerData.savedGame!.money,
-                playerData.savedGame!.rawMaterials
+                playerData.savedGame!.rawMaterials,
+                playerData.savedGame!.buildingSlots
             ],
         ]
     });

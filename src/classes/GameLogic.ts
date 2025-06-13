@@ -20,7 +20,7 @@ export type Location = {
 export enum LocationKey {
     MAIN_MENU = 'main-menu',
     OPTIONS = 'options',
-    HOMEBASE = 'homebase',
+    HQ = 'hq',
     STORAGE = 'storage',
     MAP_ROOM = 'map-room'
 }
@@ -82,23 +82,23 @@ export class GameLogic {
                 }
             ]
         },
-        [LocationKey.HOMEBASE]: {
-            label: 'Homebase',
-            key: LocationKey.HOMEBASE,
+        [LocationKey.HQ]: {
+            label: 'Headquarters',
+            key: LocationKey.HQ,
             header: () => {
                 generateFullHeader(this.playerData)
             },
             options: [
                 {
                     label: 'Storage',
-                    id: `${LocationKey.HOMEBASE}-${LocationKey.STORAGE}`,
+                    id: `${LocationKey.HQ}-${LocationKey.STORAGE}`,
                     onSelect: () => {
                         this.moveToLocation(LocationKey.STORAGE)
                     }
                 },
                 {
                     label: 'Map Room',
-                    id: `${LocationKey.HOMEBASE}-${LocationKey.MAP_ROOM}`,
+                    id: `${LocationKey.HQ}-${LocationKey.MAP_ROOM}`,
                     onSelect: () => {
                         this.moveToLocation(LocationKey.MAP_ROOM)
                     }
@@ -110,10 +110,10 @@ export class GameLogic {
             key: LocationKey.STORAGE,
             options: [
                 {
-                    label: 'Homebase',
-                    id: `${LocationKey.STORAGE}-${LocationKey.HOMEBASE}`,
+                    label: 'Headquarters',
+                    id: `${LocationKey.STORAGE}-${LocationKey.HQ}`,
                     onSelect: () => {
-                        this.moveToLocation(LocationKey.HOMEBASE)
+                        this.moveToLocation(LocationKey.HQ)
 
                     }
                 }
@@ -124,10 +124,10 @@ export class GameLogic {
             key: LocationKey.MAP_ROOM,
             options: [
                 {
-                    label: 'Homebase',
-                    id: `${LocationKey.MAP_ROOM}-${LocationKey.HOMEBASE}`,
+                    label: 'Headquarters',
+                    id: `${LocationKey.MAP_ROOM}-${LocationKey.HQ}`,
                     onSelect: () => {
-                        this.moveToLocation(LocationKey.HOMEBASE)
+                        this.moveToLocation(LocationKey.HQ)
 
                     }
                 }

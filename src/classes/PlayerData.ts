@@ -6,6 +6,7 @@ import * as fs from 'fs';
 export type StoredDataStructure = {
     money: number,
     rawMaterials: number,
+    buildingSlots: number,
     currentLocation: LocationKey
 }
 
@@ -28,7 +29,8 @@ export class PlayerData {
         this.savedGame = {
             money: 500,
             rawMaterials: 1000,
-            currentLocation: LocationKey.HOMEBASE
+            buildingSlots: 5,
+            currentLocation: LocationKey.HQ
         }
         this.save()
     }
