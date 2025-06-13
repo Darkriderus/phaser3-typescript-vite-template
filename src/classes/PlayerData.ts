@@ -23,7 +23,7 @@ export class PlayerData {
     public createNew() {
         this.savedGame = {
             money: 500,
-            rawMaterials: 500,
+            rawMaterials: 1000,
             currentLocation: LocationKey.HOMEBASE
         }
         this.save()

@@ -1,6 +1,7 @@
 import { select } from '@inquirer/prompts';
 import { GameLogic, LocationKey } from './classes/GameLogic';
 
+
 const main = async () => {
 	let exitGame = false;
 	const gameLogic = new GameLogic();
@@ -16,6 +17,10 @@ const main = async () => {
 			description: "[DESC] " + option.label,
 			key: (index + 1)
 		}))
+
+		if (currentLocation.header) {
+			currentLocation.header()
+		}
 
 		const answer = await select({
 			message: currentLocation.label,

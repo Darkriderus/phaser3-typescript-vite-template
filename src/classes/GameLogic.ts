@@ -1,18 +1,18 @@
+import { generateFullHeader } from "../helper/consoleHelper"
 import { PlayerData } from "./PlayerData"
-
-
 
 export type Option = {
     label: string
     id: string
     onSelect: () => void
-    isSelectable?: () => boolean
-    isVisible?: () => boolean
+    // isSelectable?: () => boolean
+    // isVisible?: () => boolean
 }
 
 export type Location = {
     label: string
     key: LocationKey
+    header?: () => void
     options: Option[]
 }
 
@@ -81,6 +81,9 @@ export class GameLogic {
         [LocationKey.HOMEBASE]: {
             label: 'Homebase',
             key: LocationKey.HOMEBASE,
+            header: () => {
+                generateFullHeader(this.playerData)
+            },
             options: [
                 {
                     label: 'Storage',
