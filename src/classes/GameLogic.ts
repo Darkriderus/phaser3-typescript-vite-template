@@ -21,6 +21,7 @@ export enum LocationKey {
     MAIN_MENU = 'main-menu',
     OPTIONS = 'options',
     HQ = 'hq',
+    ENGINEER_DEPT = 'engineer-dept',
     STORAGE = 'storage',
     MAP_ROOM = 'map-room'
 }
@@ -90,6 +91,13 @@ export class GameLogic {
             },
             options: [
                 {
+                    label: 'Engineer Department',
+                    id: `${LocationKey.HQ}-${LocationKey.ENGINEER_DEPT}`,
+                    onSelect: () => {
+                        this.moveToLocation(LocationKey.ENGINEER_DEPT)
+                    }
+                },
+                {
                     label: 'Storage',
                     id: `${LocationKey.HQ}-${LocationKey.STORAGE}`,
                     onSelect: () => {
@@ -101,6 +109,19 @@ export class GameLogic {
                     id: `${LocationKey.HQ}-${LocationKey.MAP_ROOM}`,
                     onSelect: () => {
                         this.moveToLocation(LocationKey.MAP_ROOM)
+                    }
+                }
+            ]
+        },
+        [LocationKey.ENGINEER_DEPT]: {
+            label: 'Engineer Department',
+            key: LocationKey.ENGINEER_DEPT,
+            options: [
+                {
+                    label: 'Headquarters',
+                    id: `${LocationKey.ENGINEER_DEPT}-${LocationKey.HQ}`,
+                    onSelect: () => {
+                        this.moveToLocation(LocationKey.HQ)
                     }
                 }
             ]

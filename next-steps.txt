@@ -1,5 +1,4 @@
-[ ] Find a better System/Implementation for Menu Structure
-[ ] Feature Baseline List
-[ ] Think about, Implement and Refactor UI
-[ ] JSON with Labels
-[ ] Data-System
+[ ] Define and Implement Buildings (Keys)
+[ ] Change buildingSlots to array of Buildings 
+
+[ ] Implement Rounds/Years
