@@ -1,73 +1,50 @@
 import { LocationKey } from "./GameLogic";
+import * as fs from 'fs';
 
-export class StoredDataStructure {
-    settings: any
-    savedGame?: {
-        date: Date,
-        money: number,
-        rawMaterials: number,
-        currentLocation?: LocationKey
-    }
+
+
+export type StoredDataStructure = {
+    money: number,
+    rawMaterials: number,
+    currentLocation: LocationKey
 }
 
 export class PlayerData {
-    private static readonly KEY = 'storedData';
+    private filename = 'saved-game.json'
 
-    // #region Getters and Setters
-    public static get hasSavedGame(): boolean {
-        return this.load().savedGame !== undefined
+    public savedGame: StoredDataStructure | null = null
+
+    constructor() {
+        if (!fs.existsSync(this.filename)) {
+            fs.writeFileSync(this.filename, "");
+        }
     }
 
-    public static get date() {
-        return this.load().savedGame?.date
-    }
-
-    public static get money(): number | undefined {
-        return this.load().savedGame?.money
-    }
-    public static set money(value: number) {
-        const playerData = this.load()
-        playerData.savedGame!.money = value
-        this.save(playerData)
-    }
-
-    public static get rawMaterials(): number | undefined {
-        return this.load().savedGame?.rawMaterials
-    }
-    public static set rawMaterials(value: number) {
-        const playerData = this.load()
-        playerData.savedGame!.rawMaterials = value
-        this.save(playerData)
-    }
-
-    public static get currentLocation(): LocationKey {
-        return this.load().savedGame?.currentLocation || LocationKey.HOMEBASE
-
-    }
-    public static set currentLocation(value: LocationKey) {
-        const playerData = this.load()
-        playerData.savedGame!.currentLocation = value
-        this.save(playerData)
-    }
-
-    // #endregion
-
-    public static create() {
-        const playerData = this.load()
-        playerData.savedGame = {
-            date: new Date(),
+    public createNew() {
+        this.savedGame = {
             money: 500,
             rawMaterials: 500,
+            currentLocation: LocationKey.HOMEBASE
         }
-        this.save(playerData)
+        this.save()
     }
 
-    private static load(): StoredDataStructure {
-        const storedData = localStorage.getItem(PlayerData.KEY);
-        return storedData ? JSON.parse(storedData) : { savedGame: undefined, settings: {} }
+    public save() {
+        if (this.savedGame) {
+            fs.writeFileSync(this.filename, JSON.stringify(this.savedGame, null, 2));
+            return true
+        } else {
+            return false
+        }
     }
 
-    private static save(dataToSave: StoredDataStructure) {
-        localStorage.setItem(PlayerData.KEY, JSON.stringify(dataToSave));
+    public load() {
+        const saveGameFileContent = fs.readFileSync(this.filename, 'utf-8')
+        if (saveGameFileContent.length > 0) {
+            this.savedGame = JSON.parse(saveGameFileContent)
+        }
+        else {
+            this.createNew()
+        }
     }
 }

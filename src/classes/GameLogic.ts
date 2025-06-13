@@ -1,42 +1,100 @@
-import { ConsoleEvents } from '../scenes/ConsoleUIScene'
-import EventsCenter from './EventsCenter'
-import { PlayerData } from './PlayerData'
+import { PlayerData } from "./PlayerData"
+
+
+
+export type Option = {
+    label: string
+    id: string
+    onSelect: () => void
+    isSelectable?: () => boolean
+    isVisible?: () => boolean
+}
+
+export type Location = {
+    label: string
+    key: LocationKey
+    options: Option[]
+}
 
 export enum LocationKey {
+    MAIN_MENU = 'main-menu',
+    OPTIONS = 'options',
     HOMEBASE = 'homebase',
     STORAGE = 'storage',
     MAP_ROOM = 'map-room'
 }
 
-export type GameOption = {
-    label: string
-    id: number
-    onSelect: () => void
-    // isSelectable: () => boolean
-    // isVisible: () => boolean
-}
-
-export type GameLocation = {
-    label: string
-    key: LocationKey
-    options: GameOption[]
-}
-
 export class GameLogic {
-    readonly ALL_LOCATIONS: Record<LocationKey, GameLocation> = {
+    public playerData = new PlayerData();
+
+    readonly LOCATIONS: Record<LocationKey, Location> = {
+        [LocationKey.MAIN_MENU]: {
+            label: 'Main Menu',
+            key: LocationKey.MAIN_MENU,
+            options: [
+                {
+                    label: 'Start New Game',
+                    id: `${LocationKey.MAIN_MENU}-new`,
+                    onSelect: () => {
+                        this.playerData.createNew()
+                        this.moveToLocation(this.playerData.savedGame!.currentLocation)
+                    }
+                },
+                {
+                    label: 'Load Game',
+                    id: `${LocationKey.MAIN_MENU}-load`,
+                    onSelect: () => {
+                        this.playerData.load()
+                        this.moveToLocation(this.playerData.savedGame!.currentLocation)
+                    }
+                },
+                {
+                    label: 'Options',
+                    id: `${LocationKey.MAIN_MENU}-options`,
+                    onSelect: () => {
+                        console.log("Options")
+
+                    }
+                },
+                {
+                    label: 'Exit',
+                    id: `${LocationKey.MAIN_MENU}-exit`,
+                    onSelect: () => {
+                        console.log("Exit")
+                    }
+                }
+            ]
+        },
+        [LocationKey.OPTIONS]: {
+            label: 'Options',
+            key: LocationKey.OPTIONS,
+            options: [
+                {
+                    label: 'Back',
+                    id: `${LocationKey.OPTIONS}-${LocationKey.MAIN_MENU}`,
+                    onSelect: () => {
+                        console.log("Back")
+                    }
+                }
+            ]
+        },
         [LocationKey.HOMEBASE]: {
             label: 'Homebase',
             key: LocationKey.HOMEBASE,
             options: [
                 {
                     label: 'Storage',
-                    id: 1,
-                    onSelect: () => this.moveToLocation(LocationKey.STORAGE)
+                    id: `${LocationKey.HOMEBASE}-${LocationKey.STORAGE}`,
+                    onSelect: () => {
+                        this.moveToLocation(LocationKey.STORAGE)
+                    }
                 },
                 {
                     label: 'Map Room',
-                    id: 2,
-                    onSelect: () => this.moveToLocation(LocationKey.MAP_ROOM)
+                    id: `${LocationKey.HOMEBASE}-${LocationKey.MAP_ROOM}`,
+                    onSelect: () => {
+                        this.moveToLocation(LocationKey.MAP_ROOM)
+                    }
                 }
             ]
         },
@@ -46,8 +104,11 @@ export class GameLogic {
             options: [
                 {
                     label: 'Homebase',
-                    id: 1,
-                    onSelect: () => this.moveToLocation(LocationKey.HOMEBASE)
+                    id: `${LocationKey.STORAGE}-${LocationKey.HOMEBASE}`,
+                    onSelect: () => {
+                        this.moveToLocation(LocationKey.HOMEBASE)
+
+                    }
                 }
             ]
         },
@@ -57,26 +118,22 @@ export class GameLogic {
             options: [
                 {
                     label: 'Homebase',
-                    id: 1,
-                    onSelect: () => this.moveToLocation(LocationKey.HOMEBASE)
+                    id: `${LocationKey.MAP_ROOM}-${LocationKey.HOMEBASE}`,
+                    onSelect: () => {
+                        this.moveToLocation(LocationKey.HOMEBASE)
+
+                    }
                 }
             ]
         }
     }
 
     constructor() {
-        const currentLocation = PlayerData.currentLocation
-        this.moveToLocation(currentLocation)
+        this.playerData.load()
     }
 
-    public get playerData() { return PlayerData }
-
-    moveToLocation(location: LocationKey) {
-        PlayerData.currentLocation = location
-        EventsCenter.emit(ConsoleEvents.UPDATE_OUTPUT, {
-            text: this.ALL_LOCATIONS[location].label,
-            options: this.ALL_LOCATIONS[location].options,
-            locationKey: location
-        });
+    moveToLocation(currentLocation: LocationKey) {
+        this.playerData.savedGame!.currentLocation = currentLocation
+        this.playerData.save()
     }
 }
