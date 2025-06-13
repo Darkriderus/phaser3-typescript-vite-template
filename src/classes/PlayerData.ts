@@ -20,6 +20,10 @@ export class PlayerData {
         }
     }
 
+    public hasSavedGame() {
+        return fs.existsSync(this.filename) && fs.readFileSync(this.filename, 'utf-8').length > 0
+    }
+
     public createNew() {
         this.savedGame = {
             money: 500,

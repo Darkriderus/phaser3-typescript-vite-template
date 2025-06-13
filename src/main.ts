@@ -11,16 +11,19 @@ const main = async () => {
 	do {
 		console.clear();
 
-		const menuChoices = currentLocation.options.map((option, index) => ({
-			name: `[${index + 1}] ${option.label}`,
-			value: option.id,
-			description: "[DESC] " + option.label,
-			key: (index + 1)
-		}))
+		const menuChoices = currentLocation.options.map((option, index) => {
+			const isDisabled = option.isDisabled?.() ?? false;
 
-		if (currentLocation.header) {
-			currentLocation.header()
-		}
+			return {
+				name: `[${index + 1}]${isDisabled ? '' : ' ' + option.label}`,
+				value: option.id,
+				description: `[DESC] ${option.label}`,
+				key: index + 1,
+				disabled: isDisabled ? option.disabledLabel?.() ?? true : false,
+			};
+		});
+
+		currentLocation.header?.()
 
 		const answer = await select({
 			message: currentLocation.label,

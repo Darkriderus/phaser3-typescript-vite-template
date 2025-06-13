@@ -5,8 +5,9 @@ export type Option = {
     label: string
     id: string
     onSelect: () => void
-    // isSelectable?: () => boolean
-    // isVisible?: () => boolean
+    isDisabled?: () => boolean
+    disabledLabel?: () => string
+    isVisible?: () => boolean
 }
 
 export type Location = {
@@ -46,7 +47,10 @@ export class GameLogic {
                     onSelect: () => {
                         this.playerData.load()
                         this.moveToLocation(this.playerData.savedGame!.currentLocation)
-                    }
+                    },
+                    isDisabled: () => !this.playerData.hasSavedGame(),
+                    disabledLabel: () => "No saved game found!"
+
                 },
                 {
                     label: 'Options',
@@ -132,7 +136,7 @@ export class GameLogic {
     }
 
     constructor() {
-        this.playerData.load()
+
     }
 
     moveToLocation(currentLocation: LocationKey) {
