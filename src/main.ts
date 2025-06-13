@@ -15,10 +15,10 @@ const main = async () => {
 			const isDisabled = option.isDisabled?.() ?? false;
 
 			return {
-				name: `[${index + 1}]${isDisabled ? '' : ' ' + option.label}`,
+				name: `[${isDisabled ? 'X' : index + 1}]${isDisabled ? '' : ' ' + option.label}`,
 				value: option.id,
 				description: `[DESC] ${option.label}`,
-				key: index + 1,
+				key: isDisabled ? null : index + 1,
 				disabled: isDisabled ? option.disabledLabel?.() ?? true : false,
 			};
 		});
