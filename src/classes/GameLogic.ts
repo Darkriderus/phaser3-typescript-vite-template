@@ -1,4 +1,5 @@
 import { generateFullHeader } from "../helper/consoleHelper"
+import { BuildingType } from "./Building"
 import { PlayerData } from "./PlayerData"
 
 export type Option = {
@@ -23,7 +24,8 @@ export enum LocationKey {
     HQ = 'hq',
     ENGINEER_DEPT = 'engineer-dept',
     STORAGE = 'storage',
-    MAP_ROOM = 'map-room'
+    MAP_ROOM = 'map-room',
+    CONSTRUCTION = 'construction'
 }
 
 export class GameLogic {
@@ -114,12 +116,41 @@ export class GameLogic {
             ]
         },
         [LocationKey.ENGINEER_DEPT]: {
-            label: 'Engineer Department',
+            label: 'Engineering Department',
             key: LocationKey.ENGINEER_DEPT,
             options: [
                 {
+                    label: 'Construction',
+                    id: `${LocationKey.ENGINEER_DEPT}-${LocationKey.CONSTRUCTION}`,
+                    onSelect: () => {
+                        this.moveToLocation(LocationKey.CONSTRUCTION)
+                    }
+                },
+                {
                     label: 'Headquarters',
                     id: `${LocationKey.ENGINEER_DEPT}-${LocationKey.HQ}`,
+                    onSelect: () => {
+                        this.moveToLocation(LocationKey.HQ)
+                    }
+                }
+            ]
+        },
+        [LocationKey.CONSTRUCTION]: {
+            label: 'Construction',
+            key: LocationKey.CONSTRUCTION,
+            options: [
+                {
+                    label: 'Build Mining Camps',
+                    id: `${LocationKey.CONSTRUCTION}-${BuildingType.MINING_CAMP}`,
+                    onSelect: () => {
+                        this.constructBuilding(BuildingType.MINING_CAMP)
+                    },
+                    isDisabled: () => this.playerData.savedGame!.buildings.find((building) => building === BuildingType.MINING_CAMP) !== undefined,
+                    disabledLabel: () => "Mining Camp already built"
+                },
+                {
+                    label: 'Back to Headquarters',
+                    id: `${LocationKey.CONSTRUCTION}-${LocationKey.HQ}`,
                     onSelect: () => {
                         this.moveToLocation(LocationKey.HQ)
                     }
@@ -163,5 +194,13 @@ export class GameLogic {
     moveToLocation(currentLocation: LocationKey) {
         this.playerData.savedGame!.currentLocation = currentLocation
         this.playerData.save()
+    }
+
+    constructBuilding(building: BuildingType) {
+        const buildingIndex = this.playerData.savedGame!.buildings.indexOf(null)
+        if (buildingIndex !== -1) {
+            this.playerData.savedGame!.buildings[buildingIndex] = building
+            this.playerData.save()
+        }
     }
 }

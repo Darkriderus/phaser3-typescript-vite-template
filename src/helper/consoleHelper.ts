@@ -50,7 +50,7 @@ export const generateFullHeader = (playerData: PlayerData) => {
             [
                 playerData.savedGame!.money,
                 playerData.savedGame!.rawMaterials,
-                playerData.savedGame!.buildingSlots
+                "(" + playerData.savedGame!.buildings.filter((building) => building === null).length + "/" + playerData.savedGame!.buildings.length + ") "
             ],
         ]
     });
