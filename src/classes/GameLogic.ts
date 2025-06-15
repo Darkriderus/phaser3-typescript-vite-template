@@ -24,7 +24,6 @@ export enum LocationKey {
     OPTIONS = 'options',
     HQ = 'hq',
     ENGINEER_DEPT = 'engineer-dept',
-    STORAGE = 'storage',
     MAP_ROOM = 'map-room',
     CONSTRUCTION = 'construction'
 }
@@ -101,13 +100,6 @@ export class GameLogic {
                     }
                 },
                 {
-                    label: 'Storage',
-                    id: `${LocationKey.HQ}-${LocationKey.STORAGE}`,
-                    onSelect: () => {
-                        this.moveToLocation(LocationKey.STORAGE)
-                    }
-                },
-                {
                     label: 'Map Room',
                     id: `${LocationKey.HQ}-${LocationKey.MAP_ROOM}`,
                     onSelect: () => {
@@ -128,7 +120,7 @@ export class GameLogic {
                     }
                 },
                 {
-                    label: 'Headquarters',
+                    label: 'Back to HQ',
                     id: `${LocationKey.ENGINEER_DEPT}-${LocationKey.HQ}`,
                     onSelect: () => {
                         this.moveToLocation(LocationKey.HQ)
@@ -158,20 +150,6 @@ export class GameLogic {
                 }
             ]
         },
-        [LocationKey.STORAGE]: {
-            label: 'Storage',
-            key: LocationKey.STORAGE,
-            options: [
-                {
-                    label: 'Headquarters',
-                    id: `${LocationKey.STORAGE}-${LocationKey.HQ}`,
-                    onSelect: () => {
-                        this.moveToLocation(LocationKey.HQ)
-
-                    }
-                }
-            ]
-        },
         [LocationKey.MAP_ROOM]: {
             label: 'Map Room',
             key: LocationKey.MAP_ROOM,
@@ -180,11 +158,10 @@ export class GameLogic {
             },
             options: [
                 {
-                    label: 'Headquarters',
+                    label: 'Back to HQ',
                     id: `${LocationKey.MAP_ROOM}-${LocationKey.HQ}`,
                     onSelect: () => {
                         this.moveToLocation(LocationKey.HQ)
-
                     }
                 }
             ]
