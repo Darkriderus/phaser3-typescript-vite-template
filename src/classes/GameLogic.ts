@@ -1,6 +1,7 @@
 import { generateFullHeader } from "../helper/consoleHelper"
 import { BuildingType } from "./Building"
 import { PlayerData } from "./PlayerData"
+import { WorldMap } from "./WorldMap"
 
 export type Option = {
     label: string
@@ -174,6 +175,9 @@ export class GameLogic {
         [LocationKey.MAP_ROOM]: {
             label: 'Map Room',
             key: LocationKey.MAP_ROOM,
+            header: () => {
+                WorldMap.generateMap(this.playerData)
+            },
             options: [
                 {
                     label: 'Headquarters',

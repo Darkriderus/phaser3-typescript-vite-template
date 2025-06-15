@@ -1,4 +1,0 @@
-[X] Define and Implement Buildings (Keys)
-[X] Change buildingSlots to array of Buildings 
-
-[ ] Implement Rounds/Years
