@@ -1,6 +1,7 @@
 import { AnsiCode, generateFullHeader } from "../helper/consoleHelper"
 import { BuildingType } from "./Building"
 import { PlayerData } from "./PlayerData"
+import { UnitData } from "./Unit"
 import { WorldMap } from "./WorldMap"
 
 export type Option = {
@@ -190,9 +191,16 @@ export class GameLogic {
                     label: 'Request new Battalion Leader',
                     id: `${LocationKey.COMM_DEPT}-new-leader`,
                     onSelect: () => {
+
                         const leader = this.playerData.savedGame!.battalions.length + 1 + ".BTL Leader"
                         const name = this.playerData.savedGame!.battalions.length + 1 + ". Battalion"
-                        this.createBattalion(leader, name)
+                        this.createBattalion(leader, name, [
+                            {
+                                name: "Debug-Platoon",
+                                combatScore: 999
+                            }
+                        ])
+
 
                         return AnsiCode.BGGreen + "New Battalion Leader: " + leader + AnsiCode.Reset
                     }
@@ -253,8 +261,8 @@ export class GameLogic {
         }
     }
 
-    createBattalion(leader: string, name: string) {
-        this.playerData.savedGame!.battalions.push({ leader, name })
+    createBattalion(leader: string, name: string, units: UnitData[]) {
+        this.playerData.savedGame!.battalions.push({ leader, name, units })
         this.playerData.save()
     }
 }

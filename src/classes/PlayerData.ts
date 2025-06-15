@@ -1,10 +1,12 @@
 import { BuildingType } from "./Building";
 import { LocationKey } from "./GameLogic";
 import * as fs from 'fs';
+import { UnitData } from "./Unit";
 
 export type Battalion = {
     leader: string,
-    name: string
+    name: string,
+    units: UnitData[]
 }
 
 export type StoredDataStructure = {
