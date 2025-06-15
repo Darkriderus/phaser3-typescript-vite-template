@@ -7,13 +7,13 @@ const main = async () => {
 	const gameLogic = new GameLogic();
 	const allLocations = gameLogic.LOCATIONS;
 	let currentLocation = allLocations[LocationKey.MAIN_MENU]
+	let message = ''
 
 	do {
 		console.clear();
 
-		const menuChoices = currentLocation.options.map((option, index) => {
+		const menuChoices = currentLocation.options.filter((option) => !option.isHidden || !option.isHidden()).map((option, index) => {
 			const isDisabled = option.isDisabled?.() ?? false;
-
 			return {
 				name: `[${isDisabled ? 'X' : index + 1}]${isDisabled ? '' : ' ' + option.label}`,
 				value: option.id,
@@ -22,6 +22,11 @@ const main = async () => {
 				disabled: isDisabled ? option.disabledLabel?.() ?? true : false,
 			};
 		});
+
+		if (message) {
+			console.log(message)
+			message = ''
+		}
 
 		currentLocation.header?.()
 
@@ -32,7 +37,7 @@ const main = async () => {
 
 		const selectedMenuOption = currentLocation.options.find((option) => option.id === answer);
 		if (selectedMenuOption) {
-			selectedMenuOption.onSelect()
+			message = selectedMenuOption.onSelect() ?? ''
 		}
 
 		currentLocation = allLocations[gameLogic.playerData.savedGame!.currentLocation]

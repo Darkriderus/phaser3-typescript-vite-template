@@ -1,4 +1,4 @@
-import { generateFullHeader } from "../helper/consoleHelper"
+import { AnsiCode, generateFullHeader } from "../helper/consoleHelper"
 import { BuildingType } from "./Building"
 import { PlayerData } from "./PlayerData"
 import { WorldMap } from "./WorldMap"
@@ -6,10 +6,10 @@ import { WorldMap } from "./WorldMap"
 export type Option = {
     label: string
     id: string
-    onSelect: () => void
+    onSelect: () => string | void
     isDisabled?: () => boolean
     disabledLabel?: () => string
-    isVisible?: () => boolean
+    isHidden?: () => boolean
 }
 
 export type Location = {
@@ -25,7 +25,9 @@ export enum LocationKey {
     HQ = 'hq',
     ENGINEER_DEPT = 'engineer-dept',
     MAP_ROOM = 'map-room',
-    CONSTRUCTION = 'construction'
+    BRIEFING_ROOM = 'briefing-room',
+    CONSTRUCTION = 'construction',
+    COMM_DEPT = 'comm-dept',
 }
 
 export class GameLogic {
@@ -93,10 +95,24 @@ export class GameLogic {
             },
             options: [
                 {
+                    label: 'Briefing Room',
+                    id: `${LocationKey.HQ}-${LocationKey.BRIEFING_ROOM}`,
+                    onSelect: () => {
+                        this.moveToLocation(LocationKey.BRIEFING_ROOM)
+                    }
+                },
+                {
                     label: 'Engineer Department',
                     id: `${LocationKey.HQ}-${LocationKey.ENGINEER_DEPT}`,
                     onSelect: () => {
                         this.moveToLocation(LocationKey.ENGINEER_DEPT)
+                    }
+                },
+                {
+                    label: 'Communications Department',
+                    id: `${LocationKey.HQ}-${LocationKey.COMM_DEPT}`,
+                    onSelect: () => {
+                        this.moveToLocation(LocationKey.COMM_DEPT)
                     }
                 },
                 {
@@ -165,6 +181,52 @@ export class GameLogic {
                     }
                 }
             ]
+        },
+        [LocationKey.COMM_DEPT]: {
+            label: 'Communication Department',
+            key: LocationKey.COMM_DEPT,
+            options: [
+                {
+                    label: 'Request new Battalion Leader',
+                    id: `${LocationKey.COMM_DEPT}-new-leader`,
+                    onSelect: () => {
+                        const leader = this.playerData.savedGame!.battalions.length + 1 + ".BTL Leader"
+                        const name = this.playerData.savedGame!.battalions.length + 1 + ". Battalion"
+                        this.createBattalion(leader, name)
+
+                        return AnsiCode.BGGreen + "New Battalion Leader: " + leader + AnsiCode.Reset
+                    }
+                },
+                {
+                    label: 'Back to HQ',
+                    id: `${LocationKey.COMM_DEPT}-${LocationKey.HQ}`,
+                    onSelect: () => {
+                        this.moveToLocation(LocationKey.HQ)
+                    }
+                }
+            ]
+        },
+        [LocationKey.BRIEFING_ROOM]: {
+            label: 'Briefing Room',
+            key: LocationKey.BRIEFING_ROOM,
+            options: [
+                {
+                    label: 'Order 1. Battalion',
+                    id: `${LocationKey.BRIEFING_ROOM}-order-1`,
+                    onSelect: () => {
+                    },
+                    isHidden: () => {
+                        return this.playerData.savedGame!.battalions.length <= 0
+                    }
+                },
+                {
+                    label: 'Back to HQ',
+                    id: `${LocationKey.BRIEFING_ROOM}-${LocationKey.HQ}`,
+                    onSelect: () => {
+                        this.moveToLocation(LocationKey.HQ)
+                    }
+                }
+            ]
         }
     }
 
@@ -183,5 +245,10 @@ export class GameLogic {
             this.playerData.savedGame!.buildings[buildingIndex] = building
             this.playerData.save()
         }
+    }
+
+    createBattalion(leader: string, name: string) {
+        this.playerData.savedGame!.battalions.push({ leader, name })
+        this.playerData.save()
     }
 }

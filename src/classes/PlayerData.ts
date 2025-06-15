@@ -2,12 +2,16 @@ import { BuildingType } from "./Building";
 import { LocationKey } from "./GameLogic";
 import * as fs from 'fs';
 
-
+export type Battalion = {
+    leader: string,
+    name: string
+}
 
 export type StoredDataStructure = {
     money: number,
     rawMaterials: number,
     buildings: (BuildingType | null)[],
+    battalions: (Battalion | null)[],
     currentLocation: LocationKey
 }
 
@@ -31,6 +35,7 @@ export class PlayerData {
             money: 500,
             rawMaterials: 1000,
             buildings: [BuildingType.BARRACKS, null, null, null, null, null],
+            battalions: [],
             currentLocation: LocationKey.HQ
         }
         this.save()
