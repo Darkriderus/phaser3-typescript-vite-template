@@ -12,7 +12,7 @@ const main = async () => {
 	do {
 		console.clear();
 
-		const menuChoices = currentLocation.options.filter((option) => !option.isHidden || !option.isHidden()).map((option, index) => {
+		const menuChoices = currentLocation.options().filter((option) => !option.isHidden || !option.isHidden()).map((option, index) => {
 			const isDisabled = option.isDisabled?.() ?? false;
 			return {
 				name: `[${isDisabled ? 'X' : index + 1}]${isDisabled ? '' : ' ' + option.label}`,
@@ -35,7 +35,7 @@ const main = async () => {
 			choices: menuChoices
 		});
 
-		const selectedMenuOption = currentLocation.options.find((option) => option.id === answer);
+		const selectedMenuOption = currentLocation.options().find((option) => option.id === answer);
 		if (selectedMenuOption) {
 			message = selectedMenuOption.onSelect() ?? ''
 		}

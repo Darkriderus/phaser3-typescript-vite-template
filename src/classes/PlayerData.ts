@@ -11,7 +11,7 @@ export type StoredDataStructure = {
     money: number,
     rawMaterials: number,
     buildings: (BuildingType | null)[],
-    battalions: (Battalion | null)[],
+    battalions: (Battalion)[],
     currentLocation: LocationKey
 }
 
