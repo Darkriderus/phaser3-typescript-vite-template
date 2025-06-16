@@ -137,7 +137,7 @@ export class GameLogic {
             key: LocationKey.COMMAND_CENTER,
             options: () => {
                 let options: Option[] =
-                    this.playerData.savedGame!.battalions.map((battalion) => {
+                    this.playerData.savedGame!.battalions.filter((battalion) => battalion !== null).map((battalion) => {
                         return {
                             label: battalion.name,
                             id: `${LocationKey.COMMAND_CENTER}-${battalion.name}`,
@@ -154,8 +154,8 @@ export class GameLogic {
                         label: translate(`${LocationKey.COMMAND_CENTER}-new-leader`),
                         id: `${LocationKey.COMMAND_CENTER}-new-leader`,
                         onSelect: () => {
-                            const leader = this.playerData.savedGame!.battalions.length + 1 + ". Leader"
-                            const name = this.playerData.savedGame!.battalions.length + 1 + ". Battalion"
+                            const leader = "LEADER_" + Math.random().toString().substring(2, 8)
+                            const name = "BTL_" + Math.random().toString().substring(2, 8)
                             this.createBattalion(leader, name, [
                                 {
                                     name: "Debug-Platoon",
@@ -164,7 +164,7 @@ export class GameLogic {
                             ])
 
 
-                            return AnsiCode.BGGreen + translate(`${LocationKey.COMMAND_CENTER}-new-leader-success`) + leader + AnsiCode.Reset
+                            return AnsiCode.BGGreen + translate(`${LocationKey.COMMAND_CENTER}-new-leader-success`) + " " + leader + AnsiCode.Reset
                         }
                     },
                     {
@@ -197,7 +197,11 @@ export class GameLogic {
     }
 
     createBattalion(leader: string, name: string, units: UnitData[]) {
-        this.playerData.savedGame!.battalions.push({ leader, name, units })
+        const btlIndex = this.playerData.savedGame!.battalions.indexOf(null)
+        if (btlIndex !== -1) {
+            this.playerData.savedGame!.battalions[btlIndex] = { leader, name, units }
+            this.playerData.save()
+        }
         this.playerData.save()
     }
 }

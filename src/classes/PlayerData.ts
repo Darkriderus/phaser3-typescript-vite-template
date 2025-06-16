@@ -6,14 +6,14 @@ import { UnitData } from "./Unit";
 export type Battalion = {
     leader: string,
     name: string,
-    units: UnitData[]
+    units: (UnitData | null)[]
 }
 
 export type StoredDataStructure = {
     money: number,
     rawMaterials: number,
     buildings: (BuildingType | null)[],
-    battalions: (Battalion)[],
+    battalions: (Battalion | null)[],
     currentLocation: LocationKey
 }
 
@@ -37,7 +37,7 @@ export class PlayerData {
             money: 500,
             rawMaterials: 1000,
             buildings: [null, null, null, null, null, null],
-            battalions: [],
+            battalions: [null, null, null, null, null, null],
             currentLocation: LocationKey.HQ
         }
         this.save()

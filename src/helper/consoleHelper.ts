@@ -44,13 +44,18 @@ export const generateFullHeader = (playerData: PlayerData) => {
             {
                 "name": "Building Slots",
                 "align": "right"
+            },
+            {
+                "name": "Battalions",
+                "align": "right"
             }
         ],
         "rows": [
             [
                 playerData.savedGame!.money,
                 playerData.savedGame!.rawMaterials,
-                "(" + playerData.savedGame!.buildings.filter((building) => building === null).length + "/" + playerData.savedGame!.buildings.length + ") "
+                "(" + playerData.savedGame!.buildings.filter((building) => building !== null).length + "/" + playerData.savedGame!.buildings.length + ") ",
+                "(" + playerData.savedGame!.battalions.filter((battalion) => battalion !== null).length + "/" + playerData.savedGame!.battalions.length + ") "
             ],
         ]
     });
