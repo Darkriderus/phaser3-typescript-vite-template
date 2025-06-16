@@ -36,7 +36,7 @@ export class PlayerData {
         this.savedGame = {
             money: 500,
             rawMaterials: 1000,
-            buildings: [BuildingType.BARRACKS, null, null, null, null, null],
+            buildings: [null, null, null, null, null, null],
             battalions: [],
             currentLocation: LocationKey.HQ
         }

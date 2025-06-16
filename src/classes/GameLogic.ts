@@ -148,24 +148,27 @@ export class GameLogic {
         [LocationKey.CONSTRUCTION]: {
             label: 'Construction',
             key: LocationKey.CONSTRUCTION,
-            options: () => [
-                {
-                    label: 'Build Mining Camps',
-                    id: `${LocationKey.CONSTRUCTION}-${BuildingType.MINING_CAMP}`,
+            options: () => {
+                const buildingOptions = Object.values(BuildingType).map((buildingType: BuildingType) => ({
+                    label: 'Build ' + buildingType,
+                    id: `${LocationKey.CONSTRUCTION}-${buildingType}`,
                     onSelect: () => {
-                        this.constructBuilding(BuildingType.MINING_CAMP)
+                        this.constructBuilding(buildingType)
                     },
-                    isDisabled: () => this.playerData.savedGame!.buildings.find((building) => building === BuildingType.MINING_CAMP) !== undefined,
-                    disabledLabel: () => "Mining Camp already built"
-                },
-                {
-                    label: 'Back to Headquarters',
-                    id: `${LocationKey.CONSTRUCTION}-${LocationKey.HQ}`,
-                    onSelect: () => {
-                        this.moveToLocation(LocationKey.HQ)
+                    isDisabled: () => this.playerData.savedGame!.buildings.find((building) => building === buildingType) !== undefined,
+                    disabledLabel: () => buildingType + " already built"
+                }))
+                return [
+                    ...buildingOptions,
+                    {
+                        label: 'Back to Headquarters',
+                        id: `${LocationKey.CONSTRUCTION}-${LocationKey.HQ}`,
+                        onSelect: () => {
+                            this.moveToLocation(LocationKey.HQ)
+                        }
                     }
-                }
-            ]
+                ]
+            }
         },
         [LocationKey.MAP_ROOM]: {
             label: 'Map Room',

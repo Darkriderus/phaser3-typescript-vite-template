@@ -1,16 +1,13 @@
 export enum BuildingType {
-    MINING_CAMP = 'mining-camp',
-    FACTORY = 'factory',
+    // HQ Buildings
     BARRACKS = 'barracks',
-    STORAGE = 'storage'
-}
+    STEAMSUIT_FACTORY = 'steam-suit-factory',
+    ARMOR_FACTORY = 'armor-factory',
+    LOGISTICS_CENTER = 'logistics-center',
+    AIRFIELD = 'airfield',
 
-export class Building {
-    public type: BuildingType
-    public tier: number
-
-    constructor(type: BuildingType) {
-        this.type = type
-        this.tier = 1
-    }
+    // Territory Buildings
+    MINING_CAMP = 'mining-camp',
+    LOCAL_BUSINESS = 'local-business',
+    TRUCKING_COMPANY = 'trucking-company',
 }
