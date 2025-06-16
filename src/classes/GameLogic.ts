@@ -2,7 +2,6 @@ import { AnsiCode, generateFullHeader } from "../helper/consoleHelper"
 import { BuildingType } from "./Building"
 import { PlayerData } from "./PlayerData"
 import { UnitData } from "./Unit"
-import { WorldMap } from "./WorldMap"
 
 export type Option = {
     label: string
@@ -24,11 +23,8 @@ export enum LocationKey {
     MAIN_MENU = 'main-menu',
     OPTIONS = 'options',
     HQ = 'hq',
-    ENGINEER_DEPT = 'engineer-dept',
-    MAP_ROOM = 'map-room',
-    BRIEFING_ROOM = 'briefing-room',
-    CONSTRUCTION = 'construction',
-    COMM_DEPT = 'comm-dept',
+    CONSTRUCTION_CENTER = 'construction-center',
+    COMMAND_CENTER = 'command-center',
 }
 
 export class GameLogic {
@@ -96,62 +92,28 @@ export class GameLogic {
             },
             options: () => [
                 {
-                    label: 'Briefing Room',
-                    id: `${LocationKey.HQ}-${LocationKey.BRIEFING_ROOM}`,
+                    label: `${LocationKey.COMMAND_CENTER}`,
+                    id: `${LocationKey.HQ}-${LocationKey.COMMAND_CENTER}`,
                     onSelect: () => {
-                        this.moveToLocation(LocationKey.BRIEFING_ROOM)
+                        this.moveToLocation(LocationKey.COMMAND_CENTER)
                     }
                 },
                 {
-                    label: 'Engineer Department',
-                    id: `${LocationKey.HQ}-${LocationKey.ENGINEER_DEPT}`,
+                    label: `${LocationKey.CONSTRUCTION_CENTER}`,
+                    id: `${LocationKey.HQ}-${LocationKey.CONSTRUCTION_CENTER}`,
                     onSelect: () => {
-                        this.moveToLocation(LocationKey.ENGINEER_DEPT)
+                        this.moveToLocation(LocationKey.CONSTRUCTION_CENTER)
                     }
                 },
-                {
-                    label: 'Communications Department',
-                    id: `${LocationKey.HQ}-${LocationKey.COMM_DEPT}`,
-                    onSelect: () => {
-                        this.moveToLocation(LocationKey.COMM_DEPT)
-                    }
-                },
-                {
-                    label: 'Map Room',
-                    id: `${LocationKey.HQ}-${LocationKey.MAP_ROOM}`,
-                    onSelect: () => {
-                        this.moveToLocation(LocationKey.MAP_ROOM)
-                    }
-                }
             ]
         },
-        [LocationKey.ENGINEER_DEPT]: {
-            label: 'Engineering Department',
-            key: LocationKey.ENGINEER_DEPT,
-            options: () => [
-                {
-                    label: 'Construction',
-                    id: `${LocationKey.ENGINEER_DEPT}-${LocationKey.CONSTRUCTION}`,
-                    onSelect: () => {
-                        this.moveToLocation(LocationKey.CONSTRUCTION)
-                    }
-                },
-                {
-                    label: 'Back to HQ',
-                    id: `${LocationKey.ENGINEER_DEPT}-${LocationKey.HQ}`,
-                    onSelect: () => {
-                        this.moveToLocation(LocationKey.HQ)
-                    }
-                }
-            ]
-        },
-        [LocationKey.CONSTRUCTION]: {
+        [LocationKey.CONSTRUCTION_CENTER]: {
             label: 'Construction',
-            key: LocationKey.CONSTRUCTION,
+            key: LocationKey.CONSTRUCTION_CENTER,
             options: () => {
                 const buildingOptions = Object.values(BuildingType).map((buildingType: BuildingType) => ({
                     label: 'Build ' + buildingType,
-                    id: `${LocationKey.CONSTRUCTION}-${buildingType}`,
+                    id: `${LocationKey.CONSTRUCTION_CENTER}-${buildingType}`,
                     onSelect: () => {
                         this.constructBuilding(buildingType)
                     },
@@ -162,7 +124,7 @@ export class GameLogic {
                     ...buildingOptions,
                     {
                         label: 'Back to Headquarters',
-                        id: `${LocationKey.CONSTRUCTION}-${LocationKey.HQ}`,
+                        id: `${LocationKey.CONSTRUCTION_CENTER}-${LocationKey.HQ}`,
                         onSelect: () => {
                             this.moveToLocation(LocationKey.HQ)
                         }
@@ -170,79 +132,50 @@ export class GameLogic {
                 ]
             }
         },
-        [LocationKey.MAP_ROOM]: {
-            label: 'Map Room',
-            key: LocationKey.MAP_ROOM,
-            header: () => {
-                WorldMap.generateMap(this.playerData)
-            },
-            options: () => [
-                {
-                    label: 'Back to HQ',
-                    id: `${LocationKey.MAP_ROOM}-${LocationKey.HQ}`,
-                    onSelect: () => {
-                        this.moveToLocation(LocationKey.HQ)
-                    }
-                }
-            ]
-        },
-        [LocationKey.COMM_DEPT]: {
-            label: 'Communication Department',
-            key: LocationKey.COMM_DEPT,
-            options: () => [
-                {
-                    label: 'Request new Battalion Leader',
-                    id: `${LocationKey.COMM_DEPT}-new-leader`,
-                    onSelect: () => {
-
-                        const leader = this.playerData.savedGame!.battalions.length + 1 + ".BTL Leader"
-                        const name = this.playerData.savedGame!.battalions.length + 1 + ". Battalion"
-                        this.createBattalion(leader, name, [
-                            {
-                                name: "Debug-Platoon",
-                                combatScore: 999
-                            }
-                        ])
-
-
-                        return AnsiCode.BGGreen + "New Battalion Leader: " + leader + AnsiCode.Reset
-                    }
-                },
-                {
-                    label: 'Back to HQ',
-                    id: `${LocationKey.COMM_DEPT}-${LocationKey.HQ}`,
-                    onSelect: () => {
-                        this.moveToLocation(LocationKey.HQ)
-                    }
-                }
-            ]
-        },
-        [LocationKey.BRIEFING_ROOM]: {
-            label: 'Briefing Room',
-            key: LocationKey.BRIEFING_ROOM,
+        [LocationKey.COMMAND_CENTER]: {
+            label: 'Command Center',
+            key: LocationKey.COMMAND_CENTER,
             options: () => {
                 let options: Option[] =
                     this.playerData.savedGame!.battalions.map((battalion) => {
                         return {
                             label: battalion.name,
-                            id: `${LocationKey.BRIEFING_ROOM}-${battalion.name}`,
+                            id: `${LocationKey.COMMAND_CENTER}-${battalion.name}`,
                             onSelect: () => {
-                                this.moveToLocation(LocationKey.BRIEFING_ROOM)
+                                this.moveToLocation(LocationKey.COMMAND_CENTER)
                                 return AnsiCode.BGGreen + "Battalion: " + battalion.name + " selected!" + AnsiCode.Reset
                             }
                         }
                     })
-                options.push(
+
+                return [
+                    ...options,
+                    {
+                        label: 'Request new Leader',
+                        id: `${LocationKey.COMMAND_CENTER}-new-leader`,
+                        onSelect: () => {
+
+                            const leader = this.playerData.savedGame!.battalions.length + 1 + ". Leader"
+                            const name = this.playerData.savedGame!.battalions.length + 1 + ". Battalion"
+                            this.createBattalion(leader, name, [
+                                {
+                                    name: "Debug-Platoon",
+                                    combatScore: 999
+                                }
+                            ])
+
+
+                            return AnsiCode.BGGreen + "New Leader: " + leader + AnsiCode.Reset
+                        }
+                    },
                     {
                         label: 'Back to HQ',
-                        id: `${LocationKey.BRIEFING_ROOM}-${LocationKey.HQ}`,
+                        id: `${LocationKey.COMMAND_CENTER}-${LocationKey.HQ}`,
                         onSelect: () => {
                             this.moveToLocation(LocationKey.HQ)
                         }
                     }
-                )
-
-                return options
+                ]
             }
         }
     }
