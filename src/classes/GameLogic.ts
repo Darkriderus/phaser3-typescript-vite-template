@@ -72,11 +72,11 @@ export class GameLogic {
             ]
         },
         [LocationKey.OPTIONS]: {
-            label: 'Options',
+            label: translate(LocationKey.OPTIONS),
             key: LocationKey.OPTIONS,
             options: () => [
                 {
-                    label: 'Back',
+                    label: translate(`${LocationKey.OPTIONS}-${LocationKey.MAIN_MENU}`),
                     id: `${LocationKey.OPTIONS}-${LocationKey.MAIN_MENU}`,
                     onSelect: () => {
                         console.log("Back")
@@ -85,21 +85,21 @@ export class GameLogic {
             ]
         },
         [LocationKey.HQ]: {
-            label: 'Headquarters',
+            label: translate(LocationKey.HQ),
             key: LocationKey.HQ,
             header: () => {
                 generateFullHeader(this.playerData)
             },
             options: () => [
                 {
-                    label: `${LocationKey.COMMAND_CENTER}`,
+                    label: translate(`${LocationKey.HQ}-${LocationKey.COMMAND_CENTER}`),
                     id: `${LocationKey.HQ}-${LocationKey.COMMAND_CENTER}`,
                     onSelect: () => {
                         this.moveToLocation(LocationKey.COMMAND_CENTER)
                     }
                 },
                 {
-                    label: `${LocationKey.CONSTRUCTION_CENTER}`,
+                    label: translate(`${LocationKey.HQ}-${LocationKey.CONSTRUCTION_CENTER}`),
                     id: `${LocationKey.HQ}-${LocationKey.CONSTRUCTION_CENTER}`,
                     onSelect: () => {
                         this.moveToLocation(LocationKey.CONSTRUCTION_CENTER)
@@ -108,22 +108,22 @@ export class GameLogic {
             ]
         },
         [LocationKey.CONSTRUCTION_CENTER]: {
-            label: 'Construction',
+            label: translate(LocationKey.CONSTRUCTION_CENTER),
             key: LocationKey.CONSTRUCTION_CENTER,
             options: () => {
                 const buildingOptions = Object.values(BuildingType).map((buildingType: BuildingType) => ({
-                    label: 'Build ' + buildingType,
-                    id: `${LocationKey.CONSTRUCTION_CENTER}-${buildingType}`,
+                    label: translate(`${LocationKey.CONSTRUCTION_CENTER}-build-${buildingType}`),
+                    id: `${LocationKey.CONSTRUCTION_CENTER}-build-${buildingType}`,
                     onSelect: () => {
                         this.constructBuilding(buildingType)
                     },
                     isDisabled: () => this.playerData.savedGame!.buildings.find((building) => building === buildingType) !== undefined,
-                    disabledLabel: () => buildingType + " already built"
+                    disabledLabel: () => translate(`${LocationKey.CONSTRUCTION_CENTER}-build-${buildingType}-error-alreadybuilt`),
                 }))
                 return [
                     ...buildingOptions,
                     {
-                        label: 'Back to Headquarters',
+                        label: translate(`${LocationKey.CONSTRUCTION_CENTER}-${LocationKey.HQ}`),
                         id: `${LocationKey.CONSTRUCTION_CENTER}-${LocationKey.HQ}`,
                         onSelect: () => {
                             this.moveToLocation(LocationKey.HQ)
@@ -133,7 +133,7 @@ export class GameLogic {
             }
         },
         [LocationKey.COMMAND_CENTER]: {
-            label: 'Command Center',
+            label: translate(LocationKey.COMMAND_CENTER),
             key: LocationKey.COMMAND_CENTER,
             options: () => {
                 let options: Option[] =
@@ -151,10 +151,9 @@ export class GameLogic {
                 return [
                     ...options,
                     {
-                        label: 'Request new Leader',
+                        label: translate(`${LocationKey.COMMAND_CENTER}-new-leader`),
                         id: `${LocationKey.COMMAND_CENTER}-new-leader`,
                         onSelect: () => {
-
                             const leader = this.playerData.savedGame!.battalions.length + 1 + ". Leader"
                             const name = this.playerData.savedGame!.battalions.length + 1 + ". Battalion"
                             this.createBattalion(leader, name, [
@@ -165,11 +164,11 @@ export class GameLogic {
                             ])
 
 
-                            return AnsiCode.BGGreen + "New Leader: " + leader + AnsiCode.Reset
+                            return AnsiCode.BGGreen + translate(`${LocationKey.COMMAND_CENTER}-new-leader-success`) + leader + AnsiCode.Reset
                         }
                     },
                     {
-                        label: 'Back to HQ',
+                        label: translate(`${LocationKey.COMMAND_CENTER}-${LocationKey.HQ}`),
                         id: `${LocationKey.COMMAND_CENTER}-${LocationKey.HQ}`,
                         onSelect: () => {
                             this.moveToLocation(LocationKey.HQ)

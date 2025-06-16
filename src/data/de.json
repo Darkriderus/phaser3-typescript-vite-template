@@ -22,5 +22,42 @@
   {
     "key": "main-menu-quit",
     "label": "Spiel beenden"
+  },
+  {
+    "key": "options",
+    "label": "Optionen"
+  },
+  {
+    "key": "hq",
+    "label": "Hauptquartier"
+  },
+  {
+    "key": "hq-command-center",
+    "label": "Zur Kommandozentrale"
+  },
+  {
+    "key": "hq-construction-center",
+    "label": "Zur Bauzentrale"
+  },
+  {
+    "key": "construction-center",
+    "label": "Bauzentrale"
+  },
+  {
+    "key": "construction-center-hq",
+    "label": "Zur Kommandozentrale"
+  },
+
+  {
+    "key": "command-center",
+    "label": "Kommandozentrale"
+  },
+  {
+    "key": "command-center-new-leader",
+    "label": "Neuen Anführer anheuern"
+  },
+  {
+    "key": "command-center-hq",
+    "label": "Zur Kommandozentrale"
   }
 ]
