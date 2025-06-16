@@ -1,4 +1,5 @@
 import { AnsiCode, generateFullHeader } from "../helper/consoleHelper"
+import { translate } from "../helper/translationHelper"
 import { BuildingType } from "./Building"
 import { PlayerData } from "./PlayerData"
 import { UnitData } from "./Unit"
@@ -32,11 +33,11 @@ export class GameLogic {
 
     readonly LOCATIONS: Record<LocationKey, Location> = {
         [LocationKey.MAIN_MENU]: {
-            label: 'Main Menu',
+            label: translate(LocationKey.MAIN_MENU),
             key: LocationKey.MAIN_MENU,
             options: () => [
                 {
-                    label: 'Start New Game',
+                    label: translate(`${LocationKey.MAIN_MENU}-new`),
                     id: `${LocationKey.MAIN_MENU}-new`,
                     onSelect: () => {
                         this.playerData.createNew()
@@ -44,29 +45,28 @@ export class GameLogic {
                     }
                 },
                 {
-                    label: 'Load Game',
+                    label: translate(`${LocationKey.MAIN_MENU}-load`),
                     id: `${LocationKey.MAIN_MENU}-load`,
                     onSelect: () => {
                         this.playerData.load()
                         this.moveToLocation(this.playerData.savedGame!.currentLocation)
                     },
                     isDisabled: () => !this.playerData.hasSavedGame(),
-                    disabledLabel: () => "No saved game found!"
+                    disabledLabel: () => translate(`${LocationKey.MAIN_MENU}-load-error-nogamefound`)
 
                 },
                 {
-                    label: 'Options',
+                    label: translate(`${LocationKey.MAIN_MENU}-options`),
                     id: `${LocationKey.MAIN_MENU}-options`,
                     onSelect: () => {
-                        console.log("Options")
-
+                        console.log(`${LocationKey.MAIN_MENU}-options`)
                     }
                 },
                 {
-                    label: 'Exit',
-                    id: `${LocationKey.MAIN_MENU}-exit`,
+                    label: translate(`${LocationKey.MAIN_MENU}-quit`),
+                    id: `${LocationKey.MAIN_MENU}-quit`,
                     onSelect: () => {
-                        console.log("Exit")
+                        console.log(`${LocationKey.MAIN_MENU}-quit`)
                     }
                 }
             ]

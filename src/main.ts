@@ -17,7 +17,7 @@ const main = async () => {
 			return {
 				name: `[${isDisabled ? 'X' : index + 1}]${isDisabled ? '' : ' ' + option.label}`,
 				value: option.id,
-				description: `[DESC] ${option.label}`,
+				// description: `[DESC] ${option.label}`,
 				key: isDisabled ? null : index + 1,
 				disabled: isDisabled ? option.disabledLabel?.() ?? true : false,
 			};

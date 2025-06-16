@@ -1,0 +1,26 @@
+[
+  {
+    "key": "main-menu",
+    "label": "Hauptmenü"
+  },
+  {
+    "key": "main-menu-new",
+    "label": "Neues Spiel starten"
+  },
+  {
+    "key": "main-menu-load",
+    "label": "Spiel laden"
+  },
+  {
+    "key": "main-menu-load-error-nogamefound",
+    "label": "Spiel laden"
+  },
+  {
+    "key": "main-menu-options",
+    "label": "Optionen"
+  },
+  {
+    "key": "main-menu-quit",
+    "label": "Spiel beenden"
+  }
+]
