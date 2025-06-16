@@ -9,12 +9,25 @@ export type Battalion = {
     units: (UnitData | null)[]
 }
 
+export enum Direction {
+    WEST = 'west',
+    EAST = 'east',
+    NORTH = 'north',
+    SOUTH = 'south'
+}
+
+export type Faction = {
+    name: string,
+    direction: Direction
+}
+
 export type StoredDataStructure = {
     money: number,
     rawMaterials: number,
     buildings: (BuildingType | null)[],
     battalions: (Battalion | null)[],
-    currentLocation: LocationKey
+    currentLocation: LocationKey,
+    factions: Faction[]
 }
 
 export class PlayerData {
@@ -38,7 +51,25 @@ export class PlayerData {
             rawMaterials: 1000,
             buildings: [null, null, null, null, null, null],
             battalions: [null, null, null, null, null, null],
-            currentLocation: LocationKey.HQ
+            currentLocation: LocationKey.HQ,
+            factions: [
+                {
+                    name: 'Faction West',
+                    direction: Direction.WEST
+                },
+                {
+                    name: 'Faction East',
+                    direction: Direction.EAST
+                },
+                {
+                    name: 'Faction North',
+                    direction: Direction.NORTH
+                },
+                {
+                    name: 'Faction South',
+                    direction: Direction.SOUTH
+                }
+            ]
         }
         this.save()
     }

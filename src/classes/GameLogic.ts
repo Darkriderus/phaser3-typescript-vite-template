@@ -26,6 +26,7 @@ export enum LocationKey {
     HQ = 'hq',
     CONSTRUCTION_CENTER = 'construction-center',
     COMMAND_CENTER = 'command-center',
+    BRIEFING_ROOM = 'briefing-room',
 }
 
 export class GameLogic {
@@ -91,6 +92,13 @@ export class GameLogic {
                 generateFullHeader(this.playerData)
             },
             options: () => [
+                {
+                    label: translate(`${LocationKey.HQ}-${LocationKey.BRIEFING_ROOM}`),
+                    id: `${LocationKey.HQ}-${LocationKey.BRIEFING_ROOM}`,
+                    onSelect: () => {
+                        this.moveToLocation(LocationKey.BRIEFING_ROOM)
+                    }
+                },
                 {
                     label: translate(`${LocationKey.HQ}-${LocationKey.COMMAND_CENTER}`),
                     id: `${LocationKey.HQ}-${LocationKey.COMMAND_CENTER}`,
@@ -164,6 +172,32 @@ export class GameLogic {
                     {
                         label: translate(`${LocationKey.COMMAND_CENTER}-${LocationKey.HQ}`),
                         id: `${LocationKey.COMMAND_CENTER}-${LocationKey.HQ}`,
+                        onSelect: () => {
+                            this.moveToLocation(LocationKey.HQ)
+                        }
+                    }
+                ]
+            }
+        },
+        [LocationKey.BRIEFING_ROOM]: {
+            label: translate(LocationKey.BRIEFING_ROOM),
+            key: LocationKey.BRIEFING_ROOM,
+            options: () => {
+                const factionOptions = this.playerData.savedGame!.factions.map((faction) => ({
+                    label: translate(`${LocationKey.BRIEFING_ROOM}-faction-attack-${faction.name}`),
+                    id: `${LocationKey.BRIEFING_ROOM}-faction-${faction.name}`,
+                    onSelect: () => {
+                        this.moveToLocation(LocationKey.HQ)
+                        return AnsiCode.BGGreen + "Faction " + faction.name + " selected!" + AnsiCode.Reset
+                    }
+                }))
+
+
+                return [
+                    ...factionOptions,
+                    {
+                        label: translate(`${LocationKey.BRIEFING_ROOM}-${LocationKey.HQ}`),
+                        id: `${LocationKey.BRIEFING_ROOM}-${LocationKey.HQ}`,
                         onSelect: () => {
                             this.moveToLocation(LocationKey.HQ)
                         }
