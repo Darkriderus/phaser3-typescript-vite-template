@@ -156,12 +156,7 @@ export class GameLogic {
                         onSelect: () => {
                             const leader = "LEADER_" + Math.random().toString().substring(2, 8)
                             const name = "BTL_" + Math.random().toString().substring(2, 8)
-                            this.createBattalion(leader, name, [
-                                {
-                                    name: "Debug-Platoon",
-                                    combatScore: 999
-                                }
-                            ])
+                            this.createBattalion(leader, name)
 
                             return AnsiCode.BGGreen + translate(`${LocationKey.COMMAND_CENTER}-new-leader-success`) + " " + leader + AnsiCode.Reset
                         }
@@ -195,7 +190,7 @@ export class GameLogic {
         }
     }
 
-    createBattalion(leader: string, name: string, units: UnitData[]) {
+    createBattalion(leader: string, name: string, units: (UnitData | null)[] = [null, null, null, null]) {
         const btlIndex = this.playerData.savedGame!.battalions.indexOf(null)
         if (btlIndex !== -1) {
             this.playerData.savedGame!.battalions[btlIndex] = { leader, name, units }
