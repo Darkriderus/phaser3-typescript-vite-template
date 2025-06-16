@@ -163,7 +163,6 @@ export class GameLogic {
                                 }
                             ])
 
-
                             return AnsiCode.BGGreen + translate(`${LocationKey.COMMAND_CENTER}-new-leader-success`) + " " + leader + AnsiCode.Reset
                         }
                     },
